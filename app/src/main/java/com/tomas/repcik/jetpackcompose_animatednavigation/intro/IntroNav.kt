@@ -46,9 +46,9 @@ fun NavGraphBuilder.introGraph(navController: NavController) {
             MotivationScreen(navController)
         }
         composable(IntroNavOption.RecommendationScreen.name, enterTransition = {
-            return@composable expandIn()
+            return@composable expandIn(tween(700))
         }, exitTransition = {
-            return@composable shrinkOut()
+            return@composable shrinkOut(tween(700))
         }, popExitTransition = { return@composable shrinkOut() }) {
             RecommendationScreen(navController)
         }
