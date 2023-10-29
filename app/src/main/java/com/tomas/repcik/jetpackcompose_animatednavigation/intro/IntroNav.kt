@@ -1,15 +1,11 @@
 package com.tomas.repcik.jetpackcompose_animatednavigation.intro
 
 import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideIn
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.shrinkOut
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -21,43 +17,44 @@ import com.tomas.repcik.jetpackcompose_animatednavigation.intro.composables.Welc
 
 fun NavGraphBuilder.introGraph(navController: NavController) {
     navigation(
-        startDestination = IntroNavOption.WelcomeScreen.name,
-        route = NavRoutes.IntroRoute.name
+        startDestination = IntroNavOption.WelcomeScreen.name, route = NavRoutes.IntroRoute.name
     ) {
-        composable(IntroNavOption.WelcomeScreen.name,
-            enterTransition = {
-                return@composable fadeIn(tween(5000))
-            },
-            exitTransition = {
-                return@composable fadeOut(tween(5000))
-            }
-        ) {
+        composable(IntroNavOption.WelcomeScreen.name, enterTransition = {
+            return@composable fadeIn(tween(1000))
+        }, exitTransition = {
+            return@composable fadeOut(tween(700))
+        }, popEnterTransition = {
+            return@composable slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.End, tween(700)
+            )
+        }) {
             WelcomeScreen(navController)
         }
-        composable(IntroNavOption.MotivationScreen.name,
+        composable(
+            IntroNavOption.MotivationScreen.name,
             enterTransition = {
-                
-                return@composable slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700))
+                return@composable slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Start, tween(700)
+                )
             },
-            exitTransition = {
-                return@composable slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700))
-            }) {
+            popExitTransition = {
+                return@composable slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.End, tween(700)
+                )
+            },
+        ) {
             MotivationScreen(navController)
         }
-        composable(IntroNavOption.RecommendationScreen.name,
-            enterTransition = {
-                return@composable slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700))
-            },
-            exitTransition = {
-                return@composable slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(700))
-            }) {
+        composable(IntroNavOption.RecommendationScreen.name, enterTransition = {
+            return@composable expandIn()
+        }, exitTransition = {
+            return@composable shrinkOut()
+        }, popExitTransition = { return@composable shrinkOut() }) {
             RecommendationScreen(navController)
         }
     }
 }
 
 enum class IntroNavOption {
-    WelcomeScreen,
-    MotivationScreen,
-    RecommendationScreen
+    WelcomeScreen, MotivationScreen, RecommendationScreen
 }
